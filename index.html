@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+   <head>
+      <title>BoxShifter</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+      <meta name="mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+      <link rel="import" href="bower_components/paper-button/paper-button.html">
+      <link rel="import" href="bower_components/paper-card/paper-card.html">
+      <link rel="import" href="bower_components/paper-slider/paper-slider.html">
+      <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+      <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+      <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+      <style include="iron-flex iron-flex-alignment"> </style>
+      <link rel="stylesheet" href="styles.css">
+      <script src="bower_components/threejs/build/three.min.js"></script>
+      <script src="bower_components/jquery/dist/jquery.min.js"></script>
+   </head>
+   <body unresolved>
+      <dom-module id="btn-forward">
+         <template>
+            <paper-button raised on-tap="handleTap">Forward</paper-button>
+         </template>
+         <script>
+            Polymer({
+              is: 'btn-forward',
+              handleTap: function() {
+                var pages = document.querySelector('iron-pages');
+                pages.selectNext();
+              }
+            });
+         </script>
+      </dom-module>
+      <dom-module id="btn-back">
+         <template>
+            <paper-button raised on-tap="handleTap">Back</paper-button>
+         </template>
+         <script>
+            Polymer({
+              is: 'btn-back',
+              handleTap: function() {
+                var pages = document.querySelector('iron-pages');
+                pages.selectPrevious();
+              }
+            });
+         </script>
+      </dom-module>
+      <style is="custom-style">
+        paper-slider {
+          --paper-slider-knob-color: var(--paper-red-500);
+          --paper-slider-input: {width: 200px;}
+          width: 95%; 
+        }
+      </style>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6">
+            <iron-pages selected="0">
+               <div>
+                  <h1>1. Dimensions</h1>
+                  <div>Height</div>
+                  <paper-slider id="height" value="1" min="1" max="2" step="0.1"  editable></paper-slider>
+                  <div>Width</div>
+                  <paper-slider id="width" value="1" min="1" max="2" step="0.1"  editable></paper-slider>
+                  <div>Length</div>
+                  <paper-slider id="length" value="1" min="1" max="2" step="0.1"  editable></paper-slider>
+               </div>
+               <div>
+                  <h1>2. Addons</h1>
+                  Edit the walls
+               </div>
+               <div>
+                  <h1>3. Colour</h1>
+                    <select id="colourChoice">
+                        <option value="">Select one...</option>
+                        <option value=0xFF0A00>Red</option>
+                        <option value=0x000000>Black</option>
+                    </select>
+                  </div>
+            </iron-pages>
+            <btn-back></btn-back>
+            <btn-forward></btn-forward>
+          </div>
+          <div class="col-sm-6">
+            <div id="webgl-container">
+              <h1>Box Preview</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script src="main.js"></script>
+      <script>
+        $("#colourChoice").change(function () {
+            var end = this.value;
+	          SetCubeColor(end);
+        });
+      </script>
+      <script>
+        var heightField = document.getElementById("height");
+        var widthField = document.getElementById("width");
+        var lengthField = document.getElementById("length");
+        function ChangeModel()
+        {
+          cube.scale.set(lengthField.value,heightField.value,widthField.value);
+        }
+        heightField.addEventListener("value-change", ChangeModel, false);
+        widthField.addEventListener("value-change", ChangeModel, false);
+        lengthField.addEventListener("value-change", ChangeModel, false);
+      </script>
+   </body>
+</html>
